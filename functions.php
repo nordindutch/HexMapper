@@ -286,6 +286,7 @@ class Hexmap{
 		$current_row = 1;
 		$total_hex = $this->coords['col'] * $this->coords['row'];
 		while($i < $total_hex){
+			/*
 			$hex = array(
 				'hexkey' => alz($current_col).".".alz($current_row),
 				'column_hex' => intval($current_col),
@@ -294,7 +295,7 @@ class Hexmap{
 				'hidden' => true,
 				'HID' => genRand(12),
 				
-			);
+			);*/
 			$rand = genRand(12);
 			$hex_post = array(
 				'post_title'	=>$rand,
@@ -305,6 +306,7 @@ class Hexmap{
 			$pid = wp_insert_post($hex_post);
 			update_field('column',intval($current_col),$pid);
 			update_field('row',intval($current_row),$pid);
+			update_field('terrain','plains',$pid);
 			array_push($poppy, $pid);
 			//add_row('hex', $hex, $this->id);
 			
@@ -329,6 +331,26 @@ class Hexmap{
 				<div class="inner-hexmap">
 				
 				<?php
+				$x = 0;
+
+				foreach(get_field('hexes', $this->id) as $the_hex){
+
+					?>
+
+<div data-terrain="<?php echo get_field('terrain', $the_hex)['value']; ?>" class="hex-top <?php if(get_field('hidden', $the_hex) && !is_user_logged_in(  )){echo "hidden";} ?> " 
+	<?php if(get_sub_field('name')){echo "name='".get_field('name', $the_hex)."'";} ?> data-col="<?php echo get_field('column', $the_hex) ?>" data-row="<?php echo get_field('row', $the_hex) ?>">
+								<div class="hex-container tile "  <?php if(is_user_logged_in(  ) || !get_field('hidden', $the_hex)){ echo 'id="'.get_post_field( 'post_name', $the_hex ).'"'  ;} ?> data-hexkey="<?php echo esc_html(alz(get_field('column', $the_hex)).".".alz(get_field('row', $the_hex))) ?>">
+									<div class="hex-wrap">
+										<div class="hex"></div>
+									</div>
+										
+								</div>
+			
+							</div>
+				
+					<?php
+				}
+
 
 				$x = 0;
 				while($x < $this->coords['col']){
@@ -365,17 +387,7 @@ class Hexmap{
 				?>
 				</div>
 				<?php
-				if(have_rows('hex', $this->id)){
-					while(have_rows('hex', $this->id)){
-						the_row();
-				
-							get_template_part('template-parts/content', 'hextile');
-						
-						?>
-							
-						<?php
-					}
-				}
+
 				?>
 				</div>
 			</div>

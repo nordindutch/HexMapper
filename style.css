@@ -280,7 +280,7 @@ html {
     background-color: #333;
   }
   to {
-    background-color: #4d4d4d;
+    background-color: #444;
   }
 }
 
@@ -289,7 +289,7 @@ html {
     background-color: #333;
   }
   to {
-    background-color: #4d4d4d;
+    background-color: #444;
   }
 }
 
@@ -1081,7 +1081,11 @@ label {
   width: 100%;
 }
 
-.white-svg {
+.map-toolbar svg .white-svg,
+.map-toolbar svg polygon,
+.map-toolbar svg path,
+.map-toolbar svg circle,
+.map-toolbar svg ellipse {
   fill: white;
 }
 
@@ -1249,12 +1253,18 @@ label {
 }
 
 .map-container .tools .map-toolbar > span:hover svg path,
-.map-container .tools .map-toolbar > span:hover svg polygon {
+.map-container .tools .map-toolbar > span:hover svg polygon,
+.map-container .tools .map-toolbar > span:hover svg rect,
+.map-container .tools .map-toolbar > span:hover svg ellipse,
+.map-container .tools .map-toolbar > span:hover svg circle {
   fill: #00b3ff;
 }
 
 .map-container .tools .map-toolbar > span.active svg path,
-.map-container .tools .map-toolbar > span.active svg polygon {
+.map-container .tools .map-toolbar > span.active svg polygon,
+.map-container .tools .map-toolbar > span.active svg rect,
+.map-container .tools .map-toolbar > span.active svg ellipse,
+.map-container .tools .map-toolbar > span.active svg circle {
   fill: #00b3ff;
 }
 
@@ -1456,6 +1466,57 @@ label {
   position: absolute;
 }
 
+.map-container.show-paint .hex-top:not(.add-hex)::before {
+  content: '';
+  height: 64px;
+  width: 64px;
+  position: absolute;
+  display: block;
+  z-index: 10;
+  background-image: url("img/hidden.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-filter: brightness(10);
+          filter: brightness(10);
+  pointer-events: none;
+}
+
+.map-container.show-paint .hex-top:not(.add-hex)[data-hidden='0']::before {
+  content: '';
+  background-image: url("img/show.png");
+}
+
+.map-container.show-paint .hex-top:not(.add-hex)[data-terrain='glacier']::before, .map-container.show-paint .hex-top:not(.add-hex)[data-terrain='urban']::before {
+  -webkit-filter: brightness(0);
+          filter: brightness(0);
+}
+
+.map-container.show-paint .hex-top:not(.add-hex) .hex-container:hover {
+  cursor: move;
+}
+
+.map-container.terrain-paint .hex-top .hex-container:hover {
+  cursor: move;
+}
+
+.map-container.terrain-paint .hex-top[data-terrain=void] .tile {
+  background-color: #666;
+  pointer-events: auto;
+}
+
+.map-container.terrain-paint .hex-top[data-terrain=void] .tile .hex {
+  background-color: #333333;
+}
+
+.map-container.terrain-paint .hex-top[data-terrain=void] .tile::before {
+  content: attr(data-hexkey);
+}
+
+.map-container.terrain-paint .hex-top[data-terrain=void] .tile .hex-wrap .hex.void {
+  background-color: #333333;
+}
+
 html,
 body {
   overflow-x: hidden;
@@ -1566,27 +1627,6 @@ body {
 
 .moving .hex-top {
   pointer-events: none !important;
-}
-
-.terrain-paint .hex-top .hex-container:hover {
-  cursor: move;
-}
-
-.terrain-paint .hex-top[data-terrain=void] .tile {
-  background-color: #666;
-  pointer-events: auto;
-}
-
-.terrain-paint .hex-top[data-terrain=void] .tile .hex {
-  background-color: #333333;
-}
-
-.terrain-paint .hex-top[data-terrain=void] .tile::before {
-  content: attr(data-hexkey);
-}
-
-.terrain-paint .hex-top[data-terrain=void] .tile .hex-wrap .hex.void {
-  background-color: #333333;
 }
 
 .river-road .inner-hexmap {
@@ -1774,7 +1814,7 @@ body {
   position: relative;
   height: 123px;
   width: 142px;
-  background-color: #4D4D4D;
+  background-color: #222;
   -webkit-transition: 0.05s -webkit-transform linear;
   transition: 0.05s -webkit-transform linear;
   transition: 0.05s transform linear;

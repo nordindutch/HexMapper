@@ -4,9 +4,9 @@ var toUpdate = [];
 jQuery(document).ready(function($) {
 
     //$('.hex-top.add-hex').remove();
-    arrange_hexes();
+    //arrange_hexes();
 
-    function arrange_hexes() {
+    (function arrange_hexes() {
         $('.column:not(.add-column)').each(function() {
 
             let col = $(this).attr('data-column');
@@ -20,7 +20,8 @@ jQuery(document).ready(function($) {
             })
 
         });
-    }
+        $('.the_map').show();
+    })()
     $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
     let draggin = false;
     $(".map-container").on('mousedown touchstart', function(e) {
@@ -129,8 +130,9 @@ jQuery(document).ready(function($) {
         $('.map-toolbar>span').removeClass('active');
         $('.map-container').removeClass('terrain-paint ');
         $(this).addClass("active")
+        $('#terrain-tool-options').hide();
         if ($(this).attr('id') == "default-tool") {
-            $('#terrain-tool-options').hide();
+
             $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
         } else {
             $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').unbind('click');
@@ -142,6 +144,11 @@ jQuery(document).ready(function($) {
             $('.inner-hexmap').on('mousedown', paint_hex);
             $('.inner-hexmap').on('mouseup', upload_terrain);
         }
+        if ($(this).attr('id') == "hide-tool") {
+            $('.map-container').addClass('show-paint');
+            $('.inner-hexmap').on('mousedown', toggleHidden);
+            $('.inner-hexmap').on('mouseup', uploadHidden);
+        }
     })
 
     function load_hex(event) {
@@ -149,7 +156,7 @@ jQuery(document).ready(function($) {
         var post_id = $(".map-container").attr("data-hexmap");
         var hex_col = $(this).attr("data-col");
         var hex_row = $(this).attr("data-row");
-
+        var hex = $(this).find('.tile').attr('id');
         $.ajax({
             url: getHex.ajax_url,
             type: 'post',
@@ -157,8 +164,7 @@ jQuery(document).ready(function($) {
                 action: 'load_hex_info',
                 query_vars: getHex.query_vars,
                 post_id: post_id,
-                hex_col: hex_col,
-                hex_row: hex_row
+                hex: hex
             },
             beforeSend: function() {
                 $('#hex-info').html('');
@@ -168,6 +174,7 @@ jQuery(document).ready(function($) {
             success: function(html) {
                 $('.tools').css('left', -320);
                 $('.ajax-loader').remove();
+
                 $('#hex-info').append(html);
                 $("#close-hex:not(.editor, .contributor)").click(function(event) {
                     event.preventDefault();
@@ -189,6 +196,7 @@ jQuery(document).ready(function($) {
                                 $('#add-note').css("pointer-events", "none")
                             },
                             success: function(html) {
+
                                 $('#add-note').css("pointer-events", "")
 
                                 if ($('#hex-notes>.note').length == 0) {
@@ -290,7 +298,6 @@ jQuery(document).ready(function($) {
                     $('.inner-hexmap').off('mouseup');
                 },
                 success: function(html) {
-
                     $('.inner-hexmap').on('mousedown', paint_hex);
                     $('.inner-hexmap').on('mouseup', upload_terrain);
 
@@ -326,6 +333,72 @@ jQuery(document).ready(function($) {
 
             })
 
+        }
+    }
+    let firstShow = true;
+    let hiddenValue;
+
+    function toggleHidden(e) {
+        if (e.button == 0) {
+            e.preventDefault();
+            toUpdate = [];
+
+            $('.hex-top:not(.add-hex) *').css('pointer-events', 'none');
+            $('.hex-top:not(.add-hex)').off('mouseover');
+            $('.hex-top:not(.add-hex)').on('mouseover', function(e) {
+                if (firstShow) {
+                    firstShow = false;
+                    hiddenValue = ($(this).attr('data-hidden') == '0') ? 1 : 0;
+                }
+                if ($(this).attr('data-toggled') != 'true') {
+
+                    $(this).attr('data-hidden', hiddenValue);
+                    let toggleInfo = {
+                        hidden: hiddenValue,
+                        hex_id: $(this).find('.hex-container').attr('id')
+                    }
+
+                    toUpdate.push(toggleInfo);
+
+
+                    $(this).attr('data-toggled', true);
+                }
+
+
+            })
+
+        }
+
+    }
+
+    function uploadHidden(e) {
+        if (e.button == 0) {
+            $('.hex-top *').css('pointer-events', '');
+            $('.hex-top').off('mouseover');
+            $('.hex-top').attr('data-toggled', '');
+            $.ajax({
+                url: getHex.ajax_url,
+                type: 'post',
+                data: {
+                    action: 'update_hidden',
+                    hidden: toUpdate,
+                    post_id: $('.map-container').attr('data-hexmap')
+                },
+                beforeSend: function() {
+                    $('.inner-hexmap').off('mousedown');
+                    $('.inner-hexmap').off('mouseup');
+                },
+                success: function(html) {
+                    console.log(html);
+                    $('.inner-hexmap').on('mousedown', toggleHidden);
+                    $('.inner-hexmap').on('mouseup', uploadHidden);
+
+                },
+                fail: function() {
+                    console.log("Ajax request failed")
+                }
+            })
+            firstShow = true;
         }
     }
 
@@ -417,7 +490,6 @@ jQuery(document).ready(function($) {
                 $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
                 $('.add-hex-row:not(.add-hex-column)').on('click', add_row);
                 $('.add-hex-row.add-hex-column').on('click', add_row_column);
-
             },
             fail: function() {
                 console.log("Ajax request failed")

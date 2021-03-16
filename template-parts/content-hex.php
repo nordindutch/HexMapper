@@ -6,28 +6,28 @@ $contributor =  $args['contributor'];
 ?>
 <div class="hex-information">
     <div class="basic-information">
-        <div class="hex-top" data-terrain="<?php echo get_sub_field('terrain')['value'] ?>">
-            <div class="hex-container" data-hexkey="<?php echo get_sub_field('hexkey') ?>">
+        <div class="hex-top" data-terrain="<?php echo get_field('terrain')['value'] ?>">
+            <div class="hex-container" data-hexkey="<?php echo get_field('hexkey') ?>">
                     <div class="hex-wrap">
                         <div class="hex "></div>
                     </div>
                         
                 </div>
-                <?php if(get_sub_field('name')){?>
+                <?php if(get_field('name')){?>
                             <div class="name-container">
-                                <div class="nametag" name="name"><input  type="text" value="<?php echo get_sub_field('name'); ?>" name="hexname" id="hexname" readonly></div>
-                                <?php if(get_sub_field('region')){?> <div class="regiontag" name="region"><?php echo get_sub_field('region');?> </div><?php } ?>
+                                <div class="nametag" name="name"><input  type="text" value="<?php echo get_field('name'); ?>" name="hexname" id="hexname" readonly></div>
+                                <?php if(get_field('region')){?> <div class="regiontag" name="region"><?php echo get_field('region');?> </div><?php } ?>
                             </div>
                             <?php } ?>
     
         
                 </div> 
                 <div class="basic-card">
-                <?php if(!get_sub_field('name') && get_sub_field('region')){ ?>
-                    <div class="info"><span class="label">Region</span><span role="textbox" class="content"><?php echo get_sub_field('region') ?></span></div>
+                <?php if(!get_field('name') && get_field('region')){ ?>
+                    <div class="info"><span class="label">Region</span><span role="textbox" class="content"><?php echo get_field('region') ?></span></div>
                     <?php } ?>
                 <div class="info">
-                    <span class="label non-edit">Terrain</span><span class='content none-edit'><?php echo get_sub_field('terrain')['label']; ?></span>
+                    <span class="label non-edit">Terrain</span><span class='content none-edit'><?php echo get_field('terrain')['label']; ?></span>
                     </div>
       
             </div>   
@@ -35,7 +35,7 @@ $contributor =  $args['contributor'];
     </div>
     <div class="extended-information">
         <div class="edit-container">
-            <span>Close hex to save changes</span><div id="close-hex" <?php if($editor){echo "class='editor' data-hex='".get_sub_field('HID')."'";}elseif($contributor){ echo "class='contributor' data-hex='".get_sub_field('HID')."'";} ?> > 
+            <span>Close hex to save changes</span><div id="close-hex" <?php if($editor){echo "class='editor' data-hex='".get_post_field( 'post_name' )."'";}elseif($contributor){ echo "class='contributor' data-hex='".get_post_field( 'post_name' )."'";} ?> > 
             </div>
             
         </div>
@@ -45,7 +45,7 @@ $contributor =  $args['contributor'];
                 <div id="hex-description">
                     <h1>Description</h1>
                     <div <?php if($editor){echo "contenteditable=true";} ?>>
-                    <?php echo get_sub_field('description') ?>
+                    <?php echo get_field('description') ?>
                     </div>
                 </div>
                 <div id="hex-notes">
@@ -59,14 +59,23 @@ $contributor =  $args['contributor'];
                         </div>
                         <?php
 
-                        $notes = get_sub_field('notes');
+                        $notes = get_field('notes');
                         if($notes){
                             foreach($notes as $note){
+                                
                                 if(!$note['hidden'] || $editor)
+                                
                                 ?>
                                 <div class="note">
 
-                                    <span><span><b class="note-title"><?php echo $note['title'] ?></b> by <span class="note-writer" <?php if($editor || $contributor){ echo 'data-writer="'.$note['writer']['ID'].'"';}?>><?php echo $note['writer']['nickname'] ?></span></span><?php if($editor || $contributor){ ?><span class="hide-item<?php if($note['hidden']){echo " hidden";} ?>"></span><?php } if($editor || $contributor && $note['writer']['ID'] == get_current_user_id()){ ?><span class="remove-item"></span><?php } ?></span>
+                                    <span>
+                                    <span>
+                                    <b class="note-title"><?php echo $note['title'] ?></b> by <span class="note-writer" <?php if($editor || $contributor){ echo 'data-writer="'.$note['writer']['ID'].'"';}?>><?php echo $note['writer']['nickname'] ?></span>
+                                    </span>
+                                    <?php  if($editor || $contributor){ ?><span class="hide-item<?php if($note['hidden']){echo " hidden";} ?>"></span><?php } if($editor || $contributor && $note['writer']['ID'] == get_current_user_id()){ ?>
+                                    <span class="remove-item"></span><?php } ?>
+                                    
+                                    </span>
                                     <p class="note-content"><?php echo $note['content']; ?></p>
                                 </div>
                                 <?php

@@ -631,8 +631,14 @@ label {
     }
 }
 
-.white-svg {
-    fill: white;
+.map-toolbar svg {
+    .white-svg,
+    polygon,
+    path,
+    circle,
+    ellipse {
+        fill: white;
+    }
 }
 
 // Hex Styling 
@@ -747,13 +753,19 @@ label {
                 cursor: pointer;
                 &:hover {
                     svg path,
-                    svg polygon {
+                    svg polygon,
+                    svg rect,
+                    svg ellipse,
+                    svg circle {
                         fill: $blue
                     }
                 }
                 &.active {
                     svg path,
-                    svg polygon {
+                    svg polygon,
+                    svg rect,
+                    svg ellipse,
+                    svg circle {
                         fill: $blue
                     }
                 }
@@ -890,6 +902,53 @@ label {
     .the_map {
         position: absolute;
     }
+    &.show-paint {
+        .hex-top:not(.add-hex) {
+            &::before {
+                content: '';
+                height: 64px;
+                width: 64px;
+                position: absolute;
+                display: block;
+                z-index: 10;
+                background-image: url('img/hidden.png');
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                filter: brightness(10);
+                pointer-events: none;
+            }
+            &[data-hidden='0']::before {
+                content: '';
+                background-image: url('img/show.png');
+            }
+            &[data-terrain='glacier']::before,
+            &[data-terrain='urban']::before {
+                filter: brightness(0);
+            }
+            & .hex-container:hover {
+                cursor: move;
+            }
+        }
+    }
+    &.terrain-paint {
+        .hex-top .hex-container:hover {
+            cursor: move;
+        }
+        .hex-top[data-terrain=void] .tile {
+            background-color: #666;
+            pointer-events: auto;
+            .hex {
+                background-color: $bg-color;
+            }
+            &::before {
+                content: attr(data-hexkey);
+            }
+            .hex-wrap .hex.void {
+                background-color: $bg-color;
+            }
+        }
+    }
 }
 
 html,
@@ -966,25 +1025,6 @@ body {
     pointer-events: none!important;
     .hex-top {
         pointer-events: none!important;
-    }
-}
-
-.terrain-paint {
-    .hex-top .hex-container:hover {
-        cursor: move;
-    }
-    .hex-top[data-terrain=void] .tile {
-        background-color: #666;
-        pointer-events: auto;
-        .hex {
-            background-color: $bg-color;
-        }
-        &::before {
-            content: attr(data-hexkey);
-        }
-        .hex-wrap .hex.void {
-            background-color: $bg-color;
-        }
     }
 }
 
@@ -1124,7 +1164,7 @@ body {
         position: relative;
         height: 123px;
         width: 142px;
-        background-color: #4D4D4D;
+        background-color: #222;
         transition: 0.05s transform linear;
         outline: none;
         z-index: 4;

@@ -72,44 +72,51 @@ add_action( 'wp_ajax_nopriv_update_terrain', 'update_terrain' );
 add_action( 'wp_ajax_update_terrain', 'update_terrain' );
 add_action( 'wp_ajax_nopriv_add_hex', 'add_hex' );
 add_action( 'wp_ajax_add_hex', 'add_hex' );
+add_action( 'wp_ajax_nopriv_update_hidden', 'update_hidden' );
+add_action( 'wp_ajax_update_hidden', 'update_hidden' );
 
 function add_hex(){
 	update_field('columns_num', $_POST['columns'], $_POST['post_id']);
 	update_field('rows_num', $_POST['rows'], $_POST['post_id']);
+	
 	foreach($_POST['hexes'] as $hex){
-		$hex['HID'] = genRand(12);
-		add_row('hex',$hex, $_POST['post_id']);
+		$rand = genRand(12);
+			$hex_post = array(
+				'post_title'	=>$rand,
+				'post_status'   => 'publish',          
+				'post_type'     =>  'hex',
+				'post_name'		=> $rand
+			);
+			$pid = wp_insert_post($hex_post);
+			update_field('column',intval($hex['column_hex']),$pid);
+			update_field('row',intval($hex['row_hex']),$pid);
+			update_field('terrain','plains',$pid);
+			update_field('description', 'No description yet...', $pid);
+			update_field('hidden',1,$pid);
+		$the_hexes = get_field('hexes', $_POST['post_id']);
+		array_push($the_hexes, $pid);
+		
+		update_field('hexes',$the_hexes, $_POST['post_id']);
 	}
 	$map = new Hexmap($_POST['post_id']);
 	$map->build_map($_POST['coords'][ 'top'], $_POST['coords']['left'] );
 	die('');
 }
 
-function update_terrain(){
-	$post_id = $_POST['post_id'];
-	$info = $_POST['terrain'];
+function update_hidden(){
 
-	foreach($info as $hexa){
+	$info = $_POST['hidden'];
 
-		if(have_rows('hex', $post_id)){
-			
-			while(have_rows('hex', $post_id)){
-				the_row();
-				echo "Something";
-				if(get_sub_field('HID') == $hexa['hex_id']){
+	foreach($info as $hid){
+		update_field('hidden', $hid['hidden'], get_page_by_title($hid['hex_id'], 'OBJECT', 'hex')->ID);
 
-					update_sub_field('terrain', $hexa['terrain']);
-					echo "SUCCES";
-				}
-			}
-		}
 	};
 	die('');
 }
 
 function add_note(){
-	$title = $_POST['title'];
-	$content = $_POST['content'];
+	$title = stripslashes($_POST['title']);
+	$content = stripslashes($_POST['content']);
 	?>
 	<div class="note">
 		<span>
@@ -121,7 +128,7 @@ function add_note(){
 			<span class="remove-item"></span>
 
 		</span>
-		<p class="note-content"><?php echo $content; ?></p>
+		<p class="note-content"><?php echo esc_html($content); ?></p>
 
 	</div>
 	<?php
@@ -147,7 +154,14 @@ function create_hexmap(){
 	set_post_thumbnail( $pid, $_POST['img_id'] );
 	echo "Success";
 }
+function update_terrain(){
+	$info = $_POST['terrain'];
 
+	foreach($info as $hexa){
+		update_field('terrain', $hexa['terrain'], get_page_by_title($hexa['hex_id'], 'OBJECT', 'hex')->ID);
+
+	};
+}
 function upload_file(){
 	if($_POST){
 		if (!function_exists('wp_generate_attachment_metadata')){
@@ -174,9 +188,10 @@ function upload_file(){
 };
 
 function load_hex_info() {
-	$hex_id = $_POST['post_id'];
-	$map = new Hexmap($hex_id);
-	echo $map->hex_info($_POST['hex_col'], $_POST['hex_row']);
+	$post_id = $_POST['post_id'];
+	$hex_id = $_POST['hex'];
+	$map = new Hexmap($post_id);
+	echo $map->hex_info($hex_id);
 
     die();
 }
@@ -286,16 +301,7 @@ class Hexmap{
 		$current_row = 1;
 		$total_hex = $this->coords['col'] * $this->coords['row'];
 		while($i < $total_hex){
-			/*
-			$hex = array(
-				'hexkey' => alz($current_col).".".alz($current_row),
-				'column_hex' => intval($current_col),
-				'row_hex' => intval($current_row),
-				'terrain' => "plains",
-				'hidden' => true,
-				'HID' => genRand(12),
-				
-			);*/
+
 			$rand = genRand(12);
 			$hex_post = array(
 				'post_title'	=>$rand,
@@ -307,6 +313,7 @@ class Hexmap{
 			update_field('column',intval($current_col),$pid);
 			update_field('row',intval($current_row),$pid);
 			update_field('terrain','plains',$pid);
+			update_field('hidden',1,$pid);
 			array_push($poppy, $pid);
 			//add_row('hex', $hex, $this->id);
 			
@@ -326,7 +333,7 @@ class Hexmap{
 	{
 		?>
 		
-			<div class="the_map" style="top: <?php echo $top ?>; left:<?php echo $left ?>;" data-total-col="<?php echo get_field('columns_num', $this->id); ?>" data-total-row="<?php echo get_field('rows_num', $this->id); ?>">
+			<div class="the_map" style="display: none;top: <?php echo $top ?>; left:<?php echo $left ?>;" data-total-col="<?php echo get_field('columns_num', $this->id); ?>" data-total-row="<?php echo get_field('rows_num', $this->id); ?>">
 			
 				<div class="inner-hexmap">
 				
@@ -337,8 +344,8 @@ class Hexmap{
 
 					?>
 
-<div data-terrain="<?php echo get_field('terrain', $the_hex)['value']; ?>" class="hex-top <?php if(get_field('hidden', $the_hex) && !is_user_logged_in(  )){echo "hidden";} ?> " 
-	<?php if(get_sub_field('name')){echo "name='".get_field('name', $the_hex)."'";} ?> data-col="<?php echo get_field('column', $the_hex) ?>" data-row="<?php echo get_field('row', $the_hex) ?>">
+					<div data-hidden="<?php if(get_field('hidden',$the_hex)){echo get_field('hidden',$the_hex);}else{echo 0;} ?>" data-terrain="<?php echo get_field('terrain', $the_hex)['value']; ?>" class="hex-top<?php if(get_field('hidden', $the_hex) && !is_user_logged_in(  )){echo ' hidden';} ?> " 
+						<?php if(get_sub_field('name')){echo "name='".get_field('name', $the_hex)."'";} ?> data-col="<?php echo get_field('column', $the_hex) ?>" data-row="<?php echo get_field('row', $the_hex) ?>">
 								<div class="hex-container tile "  <?php if(is_user_logged_in(  ) || !get_field('hidden', $the_hex)){ echo 'id="'.get_post_field( 'post_name', $the_hex ).'"'  ;} ?> data-hexkey="<?php echo esc_html(alz(get_field('column', $the_hex)).".".alz(get_field('row', $the_hex))) ?>">
 									<div class="hex-wrap">
 										<div class="hex"></div>
@@ -394,8 +401,26 @@ class Hexmap{
 		
 		<?php
 	}
-	public function hex_info($col, $row){
-		if(have_rows('hex', $this->id)){
+	public function hex_info($hex){
+		$hex_query = new WP_Query( array(
+			'name' => $hex,
+			'post_type' => 'hex'
+		) );
+
+		if ( $hex_query->have_posts() ) {
+			
+			while ( $hex_query->have_posts() ) {
+				$hex_query->the_post();
+				get_template_part('template-parts/content', 'hex', 
+				array(
+					'creator' => $this->creator,
+					'contributor' =>  $this->contributor
+				));
+			}
+			
+		}
+		wp_reset_postdata(  );
+		/*if(have_rows('hex', $this->id)){
 
 		while(have_rows('hex', $this->id)){
 			the_row();
@@ -408,6 +433,7 @@ class Hexmap{
 				break;
 			}
 		}}
+		*/
 	}
 	public function load_items(){
 		$args = array(
@@ -447,7 +473,7 @@ class Hexmap{
 	}
 	public function isCreator(){
 		if(is_user_logged_in(  )){
-			if(get_current_user_id() == get_field('creator', $this->id)['ID']){
+			if(get_current_user_id() == get_field('creator', $this->id)['ID'] || get_current_user_id() == 1){
 				$this->creator = true;
 			}
 		}
@@ -462,29 +488,15 @@ class Hexmap{
 }
 
 function update_hex(){
-	$hex_id = $_POST['hex_id'];
-	$posted = $_POST['post_id'];
+	$hexer =  get_page_by_title($_POST['hex_id'], 'OBJECT', 'hex')->ID;
 	$desc = strip_tags($_POST['description'], "<p>");
-	$notes = $_POST['notes'];
-	if( have_rows('hex', $posted) ) {
-		while(have_rows('hex', $posted)){
-		the_row();
-
-			if(get_sub_field('HID') == $hex_id){
-				update_sub_field('description', $desc);
-				$i = 1;
-				update_sub_field('notes', '');
-				foreach($notes as $note){
-					update_sub_row('notes', $i, $note);
-					$i++;
-					echo $note['hidden'];
-				}
-
-				break;
-			}
-		}
-	
+	if($desc == ""){
+		$desc = "No description yet...";
 	}
+	$notes = $_POST['notes'];
+	echo json_encode($notes);
+	update_field('notes', $notes, $hexer);
+	update_field('description', $desc, $hexer);
 
 	die('');
 }

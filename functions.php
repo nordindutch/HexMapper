@@ -314,6 +314,8 @@ class Hexmap{
 			update_field('row',intval($current_row),$pid);
 			update_field('terrain','plains',$pid);
 			update_field('hidden',1,$pid);
+			update_field('description', 'No description yet...', $pid);
+
 			array_push($poppy, $pid);
 			//add_row('hex', $hex, $this->id);
 			

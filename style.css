@@ -1466,6 +1466,11 @@ label {
   position: absolute;
 }
 
+.map-container.show-paint .hex-top[data-hidden="1"] {
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
+}
+
 .map-container.show-paint .hex-top:not(.add-hex)::before {
   content: '';
   height: 64px;
@@ -1771,8 +1776,12 @@ body {
   pointer-events: none;
 }
 
+.hex-top.hidden .hex-container::before {
+  color: white !important;
+}
+
 .hex-top.hidden .hex {
-  background-color: #333333;
+  background-color: #333333 !important;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

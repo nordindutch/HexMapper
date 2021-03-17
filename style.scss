@@ -903,6 +903,9 @@ label {
         position: absolute;
     }
     &.show-paint {
+        .hex-top[data-hidden="1"] {
+            filter: grayscale(1);
+        }
         .hex-top:not(.add-hex) {
             &::before {
                 content: '';
@@ -1140,8 +1143,11 @@ body {
     }
     &.hidden {
         pointer-events: none;
+        .hex-container::before {
+            color: white!important;
+        }
         .hex {
-            background-color: $bg-color;
+            background-color: $bg-color!important;
             @include flex-center();
             &::before {
                 content: "?";

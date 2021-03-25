@@ -15,8 +15,8 @@ Tags: custom
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,800;1,400;1,800&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import 'sass/reset.scss';
-@import 'sass/animations.scss';
+@import 'reset.scss';
+@import 'animations.scss';
 // Common Inputs
 @mixin flex-center {
     display: flex;
@@ -165,17 +165,6 @@ body {
     }
 }
 
-.user-info {
-    width: 100%;
-    background-color: $bg-color;
-    height: 285px;
-    margin-bottom: 20px;
-    padding: 20px;
-    h1 {
-        font-size: 36px;
-    }
-}
-
 .news-card {
     padding: 20px 0;
     border-bottom: 1px solid #ccc;
@@ -196,7 +185,18 @@ body {
 .side-column {
     width: 50%;
     padding-left: 20px;
-    padding-top: calc(48px * 1.8);
+    padding-top: 72px;
+    .user-info {
+        width: 100%;
+        background-color: $bg-color;
+        height: 285px;
+        margin-bottom: 20px;
+        padding: 20px;
+        h1 {
+            font-size: 36px;
+            color: white;
+        }
+    }
 }
 
 .inner-homepage {
@@ -1061,32 +1061,33 @@ body {
         }
     }
     &[data-terrain=mountains] .hex {
-        background-color: #785B00;
-        background-image: url('img/Hex_Mountains.png');
+        background-color: #917637;
+        background-image: url('img/mountains.png');
     }
     &[data-terrain=hills] .hex {
-        background-color: #896C00;
-        background-image: url('img/Hex_Hills.png');
+        background-color: #757c1e;
+        background-image: url('img/hills.png');
     }
     &[data-terrain=plains] .hex {
-        background-color: #588E00;
+        background-color: #6c8714;
     }
     &[data-terrain=high_mountains] .hex {
-        background-color: #624700;
-        background-image: url('img/Hex_High_Mountains.png');
+        background-color: #86642b;
+        background-image: url('img/high_mountains.png');
+        background-size: 100%;
     }
     &[data-terrain=lake] .hex {
         background-color: #006A8C;
         background-image: url('img/Hex_Lake.png');
         background-size: 100% 104% !important;
-        //background-blend-mode: luminosity!important;
+        background-blend-mode: multiply;
     }
     &[data-terrain=forest] .hex {
-        background-color: #437E00;
+        background-color: #306e2f;
         background-image: url('img/forest.png');
     }
     &[data-terrain=deep_forest] .hex {
-        background-color: #0F5C00;
+        background-color: #174700;
         background-image: url('img/deep_forest.png');
     }
     &[data-terrain=jungle] .hex {
@@ -1096,7 +1097,8 @@ body {
         background-color: #A2B0B4;
     }
     &[data-terrain=desert] .hex {
-        background-color: #B8A100;
+        background-color: #baac54;
+        background-image: url('img/desert.png');
     }
     &[data-terrain=coast] .hex {
         background-color: #006A8C;
@@ -1127,12 +1129,12 @@ body {
         }
     }
     &[data-terrain=canyon] .hex {
-        background-color: #C16C00;
+        background-color: #ba8f54;
         background-image: url('img/canyon.png');
+        background-size: 80%!important;
     }
     &[data-terrain=urban] .hex {
-        background-color: #588E00;
-        background-blend-mode: normal!important;
+        background-color: #6c8714;
         background-image: url('img/urban.png');
     }
     &[data-terrain=wasteland] .hex {
@@ -1215,10 +1217,10 @@ body {
                 width: 134px;
                 height: 115px;
                 clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-                background-size: 70%;
+                background-size: 95%;
                 background-position: center;
                 background-repeat: no-repeat;
-                background-blend-mode: multiply;
+                //background-blend-mode: multiply;
                 &.hidden {
                     background-color: #999;
                     @include flex-center();

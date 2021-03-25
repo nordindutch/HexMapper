@@ -1,4 +1,6 @@
 <?php 
+include get_template_directory() . "/lib/register_user.php";
+
 global $user_values;
 $user_values = array(
     'creator' => false,
@@ -54,8 +56,6 @@ function genRand($length = 10) {
 add_action( 'wp_enqueue_scripts', 'startwordpress_scripts' );
 add_action( 'wp_ajax_nopriv_load_hex_info', 'load_hex_info' );
 add_action( 'wp_ajax_load_hex_info', 'load_hex_info' );
-add_action( 'wp_ajax_nopriv_register_user', 'register_user' );
-add_action( 'wp_ajax_register_user', 'register_user' );
 add_action( 'wp_ajax_nopriv_login', 'login' );
 add_action( 'wp_ajax_login', 'login' );
 add_action( 'wp_ajax_nopriv_upload_file', 'upload_file' );
@@ -75,6 +75,8 @@ add_action( 'wp_ajax_add_hex', 'add_hex' );
 add_action( 'wp_ajax_nopriv_update_hidden', 'update_hidden' );
 add_action( 'wp_ajax_update_hidden', 'update_hidden' );
 
+
+
 function add_hex(){
 	update_field('columns_num', $_POST['columns'], $_POST['post_id']);
 	update_field('rows_num', $_POST['rows'], $_POST['post_id']);
@@ -90,7 +92,7 @@ function add_hex(){
 			$pid = wp_insert_post($hex_post);
 			update_field('column',intval($hex['column_hex']),$pid);
 			update_field('row',intval($hex['row_hex']),$pid);
-			update_field('terrain','plains',$pid);
+			update_field('terrain','void',$pid);
 			update_field('description', 'No description yet...', $pid);
 			update_field('hidden',1,$pid);
 		$the_hexes = get_field('hexes', $_POST['post_id']);
@@ -198,39 +200,7 @@ function load_hex_info() {
 add_theme_support( 'post-thumbnails' );
 
 // Register a new user
-function register_user(){
-	$new_user = array(
-		'user_login' =>	$_POST['username'],
-		'user_pass ' =>	$_POST['password'],
-		'user_email' =>	$_POST['email'],
-		'first_name' =>	$_POST['first_name'],
-		'last_name' =>	$_POST['last_name'],
-		'role'		 => 'subscriber'
-	);
-	$your_user =  wp_insert_user( $new_user );
-	if(!is_wp_error($your_user)){
-		$creds = array(
-			'user_login'    => $new_user['user_login'],
-			'user_password' => $new_user['user_pass'],
-			'remember'      => true
-		);
-		$user = wp_signon($creds, false);
-	echo json_encode(array(
-		'success' => true,
-		'id'	  => $your_user,
-		'name'	  => $new_user['first_name'],
-	));
-	
-	}
-		else{
-			$returned_object = array(
-				'success' => false,
-				'error'	  => $your_user->get_error_message()
-			);
-			echo json_encode($returned_object);
-		}
-		die();
-	}
+
 
 add_filter('show_admin_bar', '__return_false');
 add_action('wp_login_failed', '_login_failed_redirect');
@@ -312,7 +282,7 @@ class Hexmap{
 			$pid = wp_insert_post($hex_post);
 			update_field('column',intval($current_col),$pid);
 			update_field('row',intval($current_row),$pid);
-			update_field('terrain','plains',$pid);
+			update_field('terrain','void',$pid);
 			update_field('hidden',1,$pid);
 			update_field('description', 'No description yet...', $pid);
 

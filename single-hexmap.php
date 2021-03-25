@@ -123,13 +123,13 @@ $contributor = $map->contributor;
     <div class="map-tools">
         <h2>Map Tools</h2>
         <div class="map-toolbar">
-            <span id="default-tool" class="active">
+            <span id="default-tool" class="active" alt="Default Tool">
                 <svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 24 24"><polygon class="white-svg" points="24 10 13 13 10 24 0 0 "/></svg>
             </span>
-            <span id="terrain-tool">
+            <span id="terrain-tool" alt="Terrain Tool">
                 <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 128 93"><path class="white-svg" d="M92.3 18.2c-0.6 0.9-1.1 1.7-1.6 2.6 -1.2 2-2.2 3.8-3.5 5.4l-6 8.5 -6.6 10c-2.3 3.6-4.7 7.3-7 11.2 -2.9-0.4-6 0-8.7 1.2 -4.6 2-7.4 5.3-9.5 8.2 -1.4 2-2.6 4-3.7 5.9H0l31.8-56.8 23.7 20.9L85.5 0 92.3 18.2z"/><path class="white-svg" d="M112.3 71.4H81.4c0-0.2 0-0.4 0-0.7 4.1-2.9 8.1-5.8 12-8.7l9.6-7.4 2.4-2L112.3 71.4z"/><path class="white-svg" d="M71.5 65.3c3.4-6 7.1-11.8 10.8-17.6l5.7-8.5 5.9-8.3c2-2.7 3.7-5.8 5.5-8.7 1.8-2.9 4.1-5.4 6.8-7.5 2.7-2.1 5.7-3.9 9.1-5.4 3.4-1.5 7-2.7 11.4-3.2L128 7.5c-0.2 4.5-1.1 8.1-2.4 11.6 -1.3 3.4-2.8 6.6-4.7 9.4 -1.8 2.9-4.2 5.3-6.9 7.3 -2.8 2-5.7 3.9-8.3 6.1l-7.9 6.5 -8.1 6.3c-5.5 4.1-11 8.2-16.7 12L71.5 65.3z"/><path class="white-svg" d="M72.7 74.9c-1.2 2.7-3.2 4.5-5.4 6.2 -2.3 1.6-4.8 3-7.2 4.4 -5 2.8-10.1 5.4-15.8 7.5 2-5.7 4.7-10.9 7.5-15.8 1.4-2.5 2.9-4.9 4.4-7.2 1.7-2.2 3.5-4.2 6.2-5.4 4-1.8 8.6 0 10.4 3.9C73.6 70.6 73.6 73 72.7 74.9z"/><path class="white-svg" d="M72.4 71.4l0.2 0.2 0.2-0.1H72.4z"/></svg>
             </span>
-            <span id="hide-tool">
+            <span id="hide-tool" alt="Show/Hide Tool">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 104.4"><polygon class="white-svg" points="89 14.6 85 7.7 76.9 7.7 76.9 0 89.4 0 95.6 10.8 "/><rect x="53.8" class="white-svg" width="11.6" height="7.7"/><polygon class="white-svg" points="30.2 14.6 23.6 10.8 29.8 0 42.3 0 42.3 7.7 34.2 7.7 "/><rect x="12.5" y="23.9" transform="matrix(0.5001 -0.866 0.866 0.5001 -14.8984 29.6439)" class="white-svg" width="11.6" height="7.7"/><polygon class="white-svg" points="6.2 62.4 0 51.6 6.2 40.8 12.9 44.7 8.9 51.6 12.9 58.6 "/><rect x="14.4" y="69.7" transform="matrix(0.866 -0.5 0.5 0.866 -35.3051 19.2287)" class="white-svg" width="7.7" height="11.6"/><path class="white-svg" d="M42.3 95.5v0.1c-1 2.1-1.9 4.4-2.7 6.8l-0.3 0.8h-9.4l-6.2-10.8 6.6-3.8 4 7H42.3z"/><path class="white-svg" d="M65.4 100v3.3h-5.8c1.2-0.7 2.4-1.3 3.4-1.9C63.7 100.9 64.5 100.4 65.4 100z"/><polygon class="white-svg" points="89.4 103.2 76.9 103.2 76.9 95.5 85 95.5 89 88.6 95.6 92.4 "/><rect x="95.2" y="71.7" transform="matrix(0.5001 -0.866 0.866 0.5001 -14.9021 125.1634)" class="white-svg" width="11.6" height="7.7"/><path class="white-svg" d="M119.2 51.6l-6.2 10.8 -4.6-2.6 3.2-2.6c1.4-1.1 2.9-2.2 4.5-3.3 0.8-0.5 1.6-1.1 2.4-1.7 0.2-0.2 0.5-0.3 0.7-0.5L119.2 51.6z"/><path class="white-svg" d="M102.3 22.5c-2.1 1.6-3.9 3.5-5.6 5.7l-2-3.5 6.6-3.8L102.3 22.5z"/><path class="white-svg" d="M71.7 76.6c3.4-6 7.1-11.7 10.7-17.5l5.6-8.5 5.9-8.3c2-2.7 3.6-5.8 5.4-8.7 1.8-2.9 4.1-5.4 6.8-7.4 2.7-2 5.7-3.8 9-5.3 3.3-1.5 6.9-2.7 11.3-3.2l1.5 1.4c-0.2 4.4-1.1 8.1-2.3 11.5 -1.2 3.4-2.8 6.5-4.7 9.4 -1.8 2.9-4.2 5.3-6.9 7.3 -2.8 2-5.7 3.9-8.2 6.1l-7.8 6.4 -8.1 6.2c-5.5 4.1-10.9 8.2-16.7 12L71.7 76.6z"/><path class="white-svg" d="M73 86.3c-1.2 2.7-3.2 4.5-5.4 6.2 -2.3 1.6-4.8 3-7.2 4.4 -5 2.8-10.1 5.4-15.8 7.5 2-5.7 4.7-10.9 7.5-15.8 1.4-2.5 2.9-4.9 4.4-7.2 1.7-2.2 3.5-4.2 6.2-5.4 4-1.8 8.6 0 10.4 3.9C73.9 81.9 73.9 84.3 73 86.3z"/><path class="white-svg" d="M98.9 50.3c-0.7-0.7-17.4-16-38.6-16.6 -0.4 0-0.8 0-1.2 0 -0.4 0-0.8 0-1.2 0 -21.3 0.6-38 16-38.7 16.6l-2 1.9 2 1.9c0.7 0.7 18.1 16.6 39.9 16.6 21.8 0 39.1-16 39.9-16.6l2-1.9L98.9 50.3zM24.9 52.2c3.4-2.7 10.2-7.5 18.9-10.6 -2.1 3-3.3 6.6-3.3 10.6 0 3.9 1.2 7.6 3.3 10.6C35.2 59.7 28.3 54.9 24.9 52.2zM59.1 65.6c-7.4 0-13.4-6-13.4-13.4 0-7.4 6-13.4 13.4-13.4 7.4 0 13.4 6 13.4 13.4C72.4 59.6 66.4 65.6 59.1 65.6zM74.2 62.8c2.1-3 3.4-6.7 3.4-10.6 0-3.9-1.2-7.6-3.3-10.6 8.7 3.1 15.6 7.9 18.9 10.6C89.8 54.9 82.9 59.7 74.2 62.8z"/></svg>
             </span>
         </div>
@@ -173,7 +173,7 @@ $contributor = $map->contributor;
         <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 87.1 200.72" overflow="visible">
         <path d="M46 60v-8c0-11 9-19 9-20 1 0 11-10 11-22V0h-4v10c0 11-9 19-9 19-1 1-11 10-11 23v8C18 61 0 80 0 103v54a44 44 0 0087 0v-54c0-23-18-42-41-43zm3 53v6a5 5 0 01-10 0v-9a5 5 0 0110 0v3zm34 44a40 40 0 01-79 0v-40h31v2a9 9 0 0018 0v-2h30v40zm-30-44v-3a12 12 0 00-1-2v-1a5 5 0 000-1h-1v-1l-1-1-1-1-1-1h-1l-1-1V64c20 1 37 18 37 39v10H53z" fill="#fff"/>
         </svg>
-    <p>Left-lick to access hex. Left-click +  drag while  painting to apply paint to hexes. Hover over hex to see basic info.</p>
+    <p>Left-click to access hex. Left-click +  drag while  painting to apply paint to hexes. Hover over hex to see basic info.</p>
     </div>
     <div class="instruction">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.1 200.72" overflow="visible">

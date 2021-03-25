@@ -157,19 +157,19 @@ html {
 
 @-webkit-keyframes fadeIn {
   from {
-    opacity: 0%;
+    opacity: 0;
   }
   to {
-    opacity: 100%;
+    opacity: 1;
   }
 }
 
 @keyframes fadeIn {
   from {
-    opacity: 0%;
+    opacity: 0;
   }
   to {
-    opacity: 100%;
+    opacity: 1;
   }
 }
 
@@ -1464,6 +1464,8 @@ label {
 
 .map-container .the_map {
   position: absolute;
+  -webkit-animation: fadeIn 0.25s ease-out;
+          animation: fadeIn 0.25s ease-out;
 }
 
 .map-container.show-paint .hex-top[data-hidden="1"] {
@@ -1506,7 +1508,7 @@ label {
 }
 
 .map-container.terrain-paint .hex-top[data-terrain=void] .tile {
-  background-color: #666;
+  background-color: #222;
   pointer-events: auto;
 }
 
@@ -1526,6 +1528,7 @@ html,
 body {
   overflow-x: hidden;
   background-color: #333333;
+  height: 100vh;
 }
 
 .inner-rivermap {
@@ -2498,6 +2501,7 @@ body.hexmap header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  cursor: url("img/cursor.png"), auto;
 }
 
 body.hexmap header .custom-logo-link {
@@ -2511,6 +2515,93 @@ body.hexmap header .custom-logo-link img {
   width: 48px;
   -webkit-filter: brightness(0) invert(1);
           filter: brightness(0) invert(1);
+}
+
+body.hexmap header .hex-menu-button {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+body.hexmap header .hex-menu-button:hover::before {
+  opacity: 0.8;
+}
+
+body.hexmap header .hex-menu-button::before {
+  content: "";
+  height: 48px;
+  width: 48px;
+  background-color: yellow;
+  position: absolute;
+}
+
+body.hexmap .login-register {
+  z-index: 10;
+  position: absolute;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  left: 64px;
+  background-color: #222;
+  overflow-y: scroll;
+  max-height: 100vh;
+  height: 100vh;
+}
+
+body.hexmap .login-register > div {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: block;
+  position: relative;
+}
+
+body.hexmap .login-register > div > div {
+  width: 512px;
+  padding: 2rem 4rem;
+  border-left: none;
+  background-color: transparent;
+  color: white;
+}
+
+body.hexmap .login-register > div > div h1 {
+  text-align: left;
+  color: white;
+}
+
+body.hexmap .login-register > div > div .registration-form > div:last-of-type {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+body.hexmap .login-register > div > div input[type=text],
+body.hexmap .login-register > div > div input[type=password],
+body.hexmap .login-register > div > div input[type=email] {
+  background-color: #666;
+}
+
+body.hexmap .login-register > div > div input[type=submit] {
+  background-color: white;
+  color: black;
+}
+
+body.hexmap .login-register > div > div input[type=submit]:hover {
+  opacity: 0.8;
 }
 
 label {
@@ -2683,15 +2774,5 @@ input[type=text] {
   header,
   .hexmap-title {
     height: 96px;
-  }
-  .map-container {
-    height: calc( 100vh - 96px);
-  }
-  #hex-info {
-    padding-top: 96px;
-  }
-  #hex-info .hex-information .extended-information,
-  #hex-info .hex-information .basic-information {
-    height: calc(100vh - 96px);
   }
 }

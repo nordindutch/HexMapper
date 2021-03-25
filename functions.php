@@ -122,7 +122,7 @@ function add_note(){
 		<span>
 			<span>
 				<b class="note-title"><?php echo $title; ?></b> by 
-				<span class="note-writer" data-writer="<?php echo get_current_user_id() ?>"><?php echo wp_get_current_user()->nickname; ?></span>
+				<span class="note-writer" data-writer="<?php echo get_current_user_id() ?>"><?php echo wp_get_current_user()->user_firstname ; ?></span>
 			</span>
 			<span class="hide-item"></span>
 			<span class="remove-item"></span>
@@ -335,7 +335,7 @@ class Hexmap{
 	{
 		?>
 		
-			<div class="the_map" style="display: none;top: <?php echo $top ?>; left:<?php echo $left ?>;" data-total-col="<?php echo get_field('columns_num', $this->id); ?>" data-total-row="<?php echo get_field('rows_num', $this->id); ?>">
+			<div class="the_map" style="top: <?php echo $top ?>; left:<?php echo $left ?>;" data-total-col="<?php echo get_field('columns_num', $this->id); ?>" data-total-row="<?php echo get_field('rows_num', $this->id); ?>">
 			
 				<div class="inner-hexmap">
 				
@@ -343,7 +343,7 @@ class Hexmap{
 				$x = 0;
 
 				foreach(get_field('hexes', $this->id) as $the_hex){
-
+					$terrain = get_field('terrain', $the_hex);
 					?>
 
 					<div data-hidden="<?php if(get_field('hidden',$the_hex)){echo get_field('hidden',$the_hex);}else{echo 0;} ?>" data-terrain="<?php echo get_field('terrain', $the_hex)['value']; ?>" class="hex-top<?php if(get_field('hidden', $the_hex) && !is_user_logged_in(  )){echo ' hidden';} ?> " 

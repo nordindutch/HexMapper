@@ -1,3 +1,6 @@
+
+
+<?php get_header(); ?>
 <?php
 
 if(is_user_logged_in( )){
@@ -17,16 +20,102 @@ if(is_user_logged_in( )){
     }
     
 }
+elseif(isset($_GET['join']) && $_GET['join'] == get_field('join_code', $identifier)){
+?>
+<div class="login-register">
+    <div>
+        <?php if(!isset( $_GET['user-register'])){ ?>
+    <div class="signin-container">
+    <h1>Sign In</h1>
+        <?php
+        wp_login_form( 
+
+            array(
+                'echo'           => true,
+                // Default 'redirect' value takes the user back to the request URI.
+                'redirect'       => ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+                'form_id'        => 'loginform',
+                'label_username' => __( 'Username' ),
+                'label_password' => __( 'Password' ),
+                'label_remember' => __( 'Remember Me' ),
+                'label_log_in'   => __( 'Log In' ),
+                'id_username'    => 'user_login',
+                'id_password'    => 'user_pass',
+                'id_remember'    => 'rememberme',
+                'id_submit'      => 'wp-submit',
+                'remember'       => true,
+                'value_username' => '',
+                // Set 'value_remember' to true to default the "Remember me" checkbox to checked.
+                'value_remember' => false,
+            )
+                        
+        );
+        if(isset( $_GET['login_error'] ) ){
+        ?>
+        <div class="wp_login_error">
+            <?php if( isset( $_GET['login_error'] ) && $_GET['login_error'] == '2' ){ ?>
+                <p>The password you entered is incorrect, Please try again.</p>
+            <?php } 
+            else if( isset( $_GET['login_error'] ) && $_GET['login_error'] == 'empty' ) { ?>
+                <p>Please enter both username and password.</p>
+            <?php } 
+            else if(isset( $_GET['login_error'] ) && $_GET['login_error'] == '1'){
+                ?>
+                <p>Username not found</p>
+                <?php
+            }
+            ?>
+        </div> 
+        <?php 
+        }
+        ?></div><?php
+    }
+        ?>
+    
+    <div class="registration-container">
+        <h1>Join Us Today</h1>
+        <div class="registration-form">
+            <div class="full-width">
+                <label for="username">Username</label>
+                <input type="text" id="username" maxlength="24" name="username" required>
+            </div>
+            <div class="full-width">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div  class="full-width">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div  class="full-width">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password"  autocomplete="off" required>
+            </div>
+            <div class="full-width">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name"  autocomplete="on" required>
+            </div>
+            <div class="full-width">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name"  autocomplete="on" required>
+            </div>
+            <div>
+                <input type="submit" id="register-user" value="Submit" name="submit-user">
+            </div>
+        </div>
+        </div>
+        </div>
+</div>
+<?php
+}
 
 
+?>
+<?php
 $map = new Hexmap(get_the_ID());
 $editor = $map->creator;
 $contributor = $map->contributor;
 ?>
-<script>
-
-</script>
-<?php get_header(); ?>
 <!--<div class="hexmap-title"><h1><?php //the_title(); ?></h1><span>Created by <?php// echo get_field('creator')['nickname']; ?></span></div>-->
 <div class="map-container" data-hexmap="<?php echo get_the_ID();?>">
 <?php if($editor){ ?>

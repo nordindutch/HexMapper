@@ -901,6 +901,7 @@ label {
     }
     .the_map {
         position: absolute;
+        animation: fadeIn 0.25s ease-out;
     }
     &.show-paint {
         .hex-top[data-hidden="1"] {
@@ -939,7 +940,7 @@ label {
             cursor: move;
         }
         .hex-top[data-terrain=void] .tile {
-            background-color: #666;
+            background-color: #222;
             pointer-events: auto;
             .hex {
                 background-color: $bg-color;
@@ -958,6 +959,7 @@ html,
 body {
     overflow-x: hidden;
     background-color: $bg-color;
+    height: 100vh;
 }
 
 .inner-rivermap {
@@ -1678,6 +1680,7 @@ body {
             display: flex;
             flex-direction: column;
             align-items: center;
+            cursor: url("img/cursor.png"), auto;
             .custom-logo-link {
                 max-height: 48px;
                 position: relative;
@@ -1686,6 +1689,66 @@ body {
                     height: auto;
                     width: 48px;
                     filter: brightness(0) invert(1);
+                }
+            }
+            .hex-menu-button {
+                width: 64px;
+                height: 64px;
+                position: relative;
+                cursor: pointer;
+                @include flex-center();
+                &:hover::before {
+                    opacity: 0.8;
+                }
+                &::before {
+                    content: "";
+                    height: 48px;
+                    width: 48px;
+                    background-color: yellow;
+                    position: absolute;
+                }
+            }
+        }
+        .login-register {
+            z-index: 10;
+            position: absolute;
+            width: fit-content;
+            left: 64px;
+            background-color: #222;
+            overflow-y: scroll;
+            max-height: 100vh;
+            height: 100vh;
+            &>div {
+                width: fit-content;
+                display: block;
+                position: relative;
+                &>div {
+                    width: 512px;
+                    padding: 2rem 4rem;
+                    border-left: none;
+                    background-color: transparent;
+                    color: white;
+                    h1 {
+                        text-align: left;
+                        color: white;
+                    }
+                    .registration-form>div:last-of-type {
+                        width: 100%;
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    input[type=text],
+                    input[type=password],
+                    input[type=email] {
+                        background-color: #666;
+                    }
+                    input[type=submit] {
+                        background-color: white;
+                        color: black;
+                        &:hover {
+                            opacity: 0.8;
+                        }
+                    }
                 }
             }
         }
@@ -1825,17 +1888,5 @@ input[type=text] {
     header,
     .hexmap-title {
         height: 96px;
-    }
-    .map-container {
-        height: calc( 100vh - 96px);
-    }
-    #hex-info {
-        padding-top: 96px;
-        .hex-information {
-            .extended-information,
-            .basic-information {
-                height: calc(100vh - 96px);
-            }
-        }
     }
 }

@@ -1,12 +1,14 @@
 var editor;
 var contributor;
 var toUpdate = [];
+
 jQuery(document).ready(function($) {
 
     //$('.hex-top.add-hex').remove();
-    //arrange_hexes();
+    arrange_hexes();
+    new ClipboardJS('#join-code');
 
-    (function arrange_hexes() {
+    function arrange_hexes() {
         $('.column:not(.add-column)').each(function() {
 
             let col = $(this).attr('data-column');
@@ -20,8 +22,9 @@ jQuery(document).ready(function($) {
             })
 
         });
-        $('.the_map').show();
-    })()
+
+    }
+
     $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
     let draggin = false;
     $(".map-container").on('mousedown touchstart', function(e) {
@@ -129,6 +132,7 @@ jQuery(document).ready(function($) {
         $('.inner-hexmap').unbind('mousedown');
         $('.map-toolbar>span').removeClass('active');
         $('.map-container').removeClass('terrain-paint ');
+        $('.map-container').removeClass('show-paint ');
         $(this).addClass("active")
         $('#terrain-tool-options').hide();
         if ($(this).attr('id') == "default-tool") {
@@ -487,9 +491,22 @@ jQuery(document).ready(function($) {
                 $('.map-container').append(html);
                 arrange_hexes();
                 $('.add-hex-column:not(.add-hex-row)').on('click', add_column);
-                $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
+
                 $('.add-hex-row:not(.add-hex-column)').on('click', add_row);
                 $('.add-hex-row.add-hex-column').on('click', add_row_column);
+                if ($('.map-toolbar>span.active').attr('id') == "terrain-tool") {
+                    $('.inner-hexmap').on('mousedown', paint_hex);
+                    $('.map-container').addClass('terrain-paint');
+                    $('.inner-hexmap').on('mouseup', upload_terrain);
+                } else if ($('.map-toolbar>span.active').attr('id') == "hide-tool") {
+
+                    $('.map-container').addClass('show-paint');
+                    $('.inner-hexmap').on('mousedown', toggleHidden);
+                    $('.inner-hexmap').on('mouseup', uploadHidden);
+                } else {
+                    $('div:not(.basic-information)>.hex-top:not(.hidden, .add-hex, .void)').on('click', load_hex);
+                }
+
             },
             fail: function() {
                 console.log("Ajax request failed")

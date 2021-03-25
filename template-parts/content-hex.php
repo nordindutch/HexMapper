@@ -58,19 +58,22 @@ $contributor =  $args['contributor'];
                             <input type="submit" name="add-note" id="add-note" value="Add Note">
                         </div>
                         <?php
-
+                        }
                         $notes = get_field('notes');
                         if($notes){
+                            
                             foreach($notes as $note){
                                 
-                                if(!$note['hidden'] || $editor)
+                                
+                                
+                                if(!$note['hidden']  || $editor){
                                 
                                 ?>
                                 <div class="note">
 
                                     <span>
                                     <span>
-                                    <b class="note-title"><?php echo $note['title'] ?></b> by <span class="note-writer" <?php if($editor || $contributor){ echo 'data-writer="'.$note['writer']['ID'].'"';}?>><?php echo $note['writer']['nickname'] ?></span>
+                                    <b class="note-title"><?php echo $note['title'] ?></b> by <span class="note-writer" <?php if($editor || $contributor){ echo 'data-writer="'.$note['writer']['ID'].'"';}?>><?php echo $note['writer']['user_firstname'] ?></span>
                                     </span>
                                     <?php  if($editor || $contributor){ ?><span class="hide-item<?php if($note['hidden']){echo " hidden";} ?>"></span><?php } if($editor || $contributor && $note['writer']['ID'] == get_current_user_id()){ ?>
                                     <span class="remove-item"></span><?php } ?>
@@ -79,12 +82,13 @@ $contributor =  $args['contributor'];
                                     <p class="note-content"><?php echo $note['content']; ?></p>
                                 </div>
                                 <?php
+                                }
                             }
                         }
                         else{
                             echo "No notes yet... ";
                         }
-                    } ?>
+                     ?>
                     
                 </div>
             </div>
